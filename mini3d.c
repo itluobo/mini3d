@@ -200,7 +200,7 @@ void matrix_set_rotate(matrix_t *m, float x, float y, float z, float theta) {
 	m->m[3][3] = 1.0f;
 }
 
-// 设置摄像机
+// 设置摄像机（世界坐标到局部坐标的转换）
 void matrix_set_lookat(matrix_t *m, const vector_t *eye, const vector_t *at, const vector_t *up) {
 	vector_t xaxis, yaxis, zaxis;
 
@@ -871,7 +871,7 @@ void draw_plane(device_t *device, int a, int b, int c, int d) {
 
 void draw_box(device_t *device, float theta) {
 	matrix_t m;
-	matrix_set_rotate(&m, -1, -0.5, 1, theta);
+	matrix_set_rotate(&m, 1, 0, 0, theta);
 	device->transform.world = m;
 	transform_update(&device->transform);
 	draw_plane(device, 0, 1, 2, 3);
@@ -883,7 +883,7 @@ void draw_box(device_t *device, float theta) {
 }
 
 void camera_at_zero(device_t *device, float x, float y, float z) {
-	point_t eye = { x, y, z, 1 }, at = { 0, 0, 0, 1 }, up = { 0, 0, 1, 1 };
+	point_t eye = { x, y, z, 1 }, at = { 0, 0, 0, 1 }, up = { 0, 1, 0, 1 };
 	matrix_set_lookat(&device->transform.view, &eye, &at, &up);
 	transform_update(&device->transform);
 }
@@ -916,7 +916,7 @@ int main(void)
 		return -1;
 
 	device_init(&device, 800, 600, screen_fb);
-	camera_at_zero(&device, 3, 0, 0);
+	camera_at_zero(&device, 0, 3, -1);
 
 	init_texture(&device);
 	device.render_state = RENDER_STATE_TEXTURE;
@@ -924,7 +924,7 @@ int main(void)
 	while (screen_exit == 0 && screen_keys[VK_ESCAPE] == 0) {
 		screen_dispatch();
 		device_clear(&device, 1);
-		camera_at_zero(&device, pos, 0, 0);
+		camera_at_zero(&device, 0, 3, -pos);
 		
 		if (screen_keys[VK_UP]) pos -= 0.01f;
 		if (screen_keys[VK_DOWN]) pos += 0.01f;
