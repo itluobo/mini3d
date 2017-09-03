@@ -1,13 +1,21 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Release|Win32">
       <Configuration>Release</Configuration>
       <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -20,14 +28,20 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -41,9 +55,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>C:\dev\mini3d\libraries\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>libraries\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -56,6 +74,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>C:\dev\mini3d\libraries\libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>assimpd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -75,8 +95,70 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Link>
+      <AdditionalDependencies>assimpd.dll;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>libraries\libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="mini3d.c" />
+    <ClCompile Include="D3D.cpp" />
+    <ClCompile Include="device.cpp" />
+    <ClCompile Include="mesh.cpp" />
+    <ClCompile Include="mini3d.cpp" />
+    <ClCompile Include="texture.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="D3D.h" />
+    <ClInclude Include="device.h" />
+    <ClInclude Include="libraries\include\assimp\ai_assert.h" />
+    <ClInclude Include="libraries\include\assimp\anim.h" />
+    <ClInclude Include="libraries\include\assimp\camera.h" />
+    <ClInclude Include="libraries\include\assimp\cexport.h" />
+    <ClInclude Include="libraries\include\assimp\cfileio.h" />
+    <ClInclude Include="libraries\include\assimp\cimport.h" />
+    <ClInclude Include="libraries\include\assimp\color4.h" />
+    <ClInclude Include="libraries\include\assimp\Compiler\poppack1.h" />
+    <ClInclude Include="libraries\include\assimp\Compiler\pstdint.h" />
+    <ClInclude Include="libraries\include\assimp\Compiler\pushpack1.h" />
+    <ClInclude Include="libraries\include\assimp\config.h" />
+    <ClInclude Include="libraries\include\assimp\DefaultLogger.hpp" />
+    <ClInclude Include="libraries\include\assimp\defs.h" />
+    <ClInclude Include="libraries\include\assimp\Exporter.hpp" />
+    <ClInclude Include="libraries\include\assimp\Importer.hpp" />
+    <ClInclude Include="libraries\include\assimp\importerdesc.h" />
+    <ClInclude Include="libraries\include\assimp\IOStream.hpp" />
+    <ClInclude Include="libraries\include\assimp\IOSystem.hpp" />
+    <ClInclude Include="libraries\include\assimp\light.h" />
+    <ClInclude Include="libraries\include\assimp\Logger.hpp" />
+    <ClInclude Include="libraries\include\assimp\LogStream.hpp" />
+    <ClInclude Include="libraries\include\assimp\material.h" />
+    <ClInclude Include="libraries\include\assimp\matrix3x3.h" />
+    <ClInclude Include="libraries\include\assimp\matrix4x4.h" />
+    <ClInclude Include="libraries\include\assimp\mesh.h" />
+    <ClInclude Include="libraries\include\assimp\metadata.h" />
+    <ClInclude Include="libraries\include\assimp\NullLogger.hpp" />
+    <ClInclude Include="libraries\include\assimp\postprocess.h" />
+    <ClInclude Include="libraries\include\assimp\ProgressHandler.hpp" />
+    <ClInclude Include="libraries\include\assimp\quaternion.h" />
+    <ClInclude Include="libraries\include\assimp\scene.h" />
+    <ClInclude Include="libraries\include\assimp\texture.h" />
+    <ClInclude Include="libraries\include\assimp\types.h" />
+    <ClInclude Include="libraries\include\assimp\vector2.h" />
+    <ClInclude Include="libraries\include\assimp\vector3.h" />
+    <ClInclude Include="libraries\include\assimp\version.h" />
+    <ClInclude Include="mesh.h" />
+    <ClInclude Include="stb_image.h" />
+    <ClInclude Include="texture.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="libraries\include\assimp\color4.inl" />
+    <None Include="libraries\include\assimp\material.inl" />
+    <None Include="libraries\include\assimp\matrix3x3.inl" />
+    <None Include="libraries\include\assimp\matrix4x4.inl" />
+    <None Include="libraries\include\assimp\quaternion.inl" />
+    <None Include="libraries\include\assimp\vector2.inl" />
+    <None Include="libraries\include\assimp\vector3.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
