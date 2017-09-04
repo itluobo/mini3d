@@ -75,7 +75,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>libraries\libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>assimpd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>lua.lib;assimpd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -147,6 +147,32 @@
     <ClInclude Include="libraries\include\assimp\vector2.h" />
     <ClInclude Include="libraries\include\assimp\vector3.h" />
     <ClInclude Include="libraries\include\assimp\version.h" />
+    <ClInclude Include="libraries\include\lua\lapi.h" />
+    <ClInclude Include="libraries\include\lua\lauxlib.h" />
+    <ClInclude Include="libraries\include\lua\lcode.h" />
+    <ClInclude Include="libraries\include\lua\lctype.h" />
+    <ClInclude Include="libraries\include\lua\ldebug.h" />
+    <ClInclude Include="libraries\include\lua\ldo.h" />
+    <ClInclude Include="libraries\include\lua\lfunc.h" />
+    <ClInclude Include="libraries\include\lua\lgc.h" />
+    <ClInclude Include="libraries\include\lua\llex.h" />
+    <ClInclude Include="libraries\include\lua\llimits.h" />
+    <ClInclude Include="libraries\include\lua\lmem.h" />
+    <ClInclude Include="libraries\include\lua\lobject.h" />
+    <ClInclude Include="libraries\include\lua\lopcodes.h" />
+    <ClInclude Include="libraries\include\lua\lparser.h" />
+    <ClInclude Include="libraries\include\lua\lprefix.h" />
+    <ClInclude Include="libraries\include\lua\lstate.h" />
+    <ClInclude Include="libraries\include\lua\lstring.h" />
+    <ClInclude Include="libraries\include\lua\ltable.h" />
+    <ClInclude Include="libraries\include\lua\ltm.h" />
+    <ClInclude Include="libraries\include\lua\lua.h" />
+    <ClInclude Include="libraries\include\lua\lua.hpp" />
+    <ClInclude Include="libraries\include\lua\luaconf.h" />
+    <ClInclude Include="libraries\include\lua\lualib.h" />
+    <ClInclude Include="libraries\include\lua\lundump.h" />
+    <ClInclude Include="libraries\include\lua\lvm.h" />
+    <ClInclude Include="libraries\include\lua\lzio.h" />
     <ClInclude Include="mesh.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="texture.h" />

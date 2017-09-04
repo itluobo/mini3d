@@ -29,6 +29,14 @@
 #include "device.h"
 #include "mesh.h"
 
+extern "C"{
+#include "lua/lauxlib.h"
+#include "lua/lualib.h"
+#include "lua/lobject.h"
+#include "lua/lstate.h"
+}
+
+
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
@@ -269,7 +277,7 @@ void loadModel(mesh_t* tar, std::string path, std::string dir)
 	point_t2* pos_list = (point_t2*)malloc(sizeof(point_t2) * mesh->mNumVertices);
 	set_mesh_vertexs(tar, pos_list, mesh->mNumVertices);
 	point_t2* pos = pos_list;
-	for (int i = 0; i < mesh->mNumVertices; i++)
+	for (unsigned int i = 0; i < mesh->mNumVertices; i++)
 	{
 		pos->x = mesh->mVertices[i].x;
 		pos->y = mesh->mVertices[i].y;
@@ -290,7 +298,7 @@ void loadModel(mesh_t* tar, std::string path, std::string dir)
 	triangle_t* faces = (triangle_t*)malloc(sizeof(triangle_t) * mesh->mNumFaces);
 	set_mesh_triangles(tar, faces, mesh->mNumFaces);
 	triangle_t* triangle = faces;
-	for (int i = 0; i < mesh->mNumFaces; i++)
+	for (unsigned int i = 0; i < mesh->mNumFaces; i++)
 	{
 		aiFace face = mesh->mFaces[i];
 		triangle->a.idx = face.mIndices[0];
@@ -302,7 +310,7 @@ void loadModel(mesh_t* tar, std::string path, std::string dir)
 		++triangle;
 	}
 	aiMaterial* mat = scene->mMaterials[mesh->mMaterialIndex];
-	for (int i = 0; i < mat->GetTextureCount(aiTextureType_DIFFUSE); i++)
+	for (unsigned int i = 0; i < mat->GetTextureCount(aiTextureType_DIFFUSE); i++)
 	{
 		aiString str;
 		mat->GetTexture(aiTextureType_DIFFUSE, i, &str);
@@ -314,12 +322,21 @@ void loadModel(mesh_t* tar, std::string path, std::string dir)
 	std::cout << "loadModel suc " << path << "faces"<< mesh->mNumFaces << std::endl;
 }
 
+void test_lua(){
+	// test lua
+	lua_State* L = luaL_newstate();
+	luaL_openlibs(L);
+	luaL_dostring(L, "print(\"hello lua\")");
+	luaL_dostring(L, "require(\"res.LuaScrips.hello\")");
+}
+
 int main(void)
 {
+	test_lua();
 	device_t device;
 	texture ground_tex, box_tex;
 	mesh_t box_mesh;
-	load_texture(&ground_tex, "res/images/hello.png");
+	load_texture(&ground_tex, "res/images/hello.png");;
 	load_texture(&box_tex, "res/images/container2.png");
 	//load_texture(&box_tex, "res/objects/cyborg/cyborg_diffuse.png");
 	//set_mesh_vertexs(&box_mesh, box_vertexs, 8);
@@ -336,10 +353,9 @@ int main(void)
 
 	if (screen_init(800, 600, title)) 
 		return -1;
-	loadModel(&box_mesh, "res/objects/cyborg/cyborg.obj", "res/objects/cyborg/");
+	loadModel(&box_mesh, "res/objects/Mandroid/Mandroid.obj", "res/objects/Mandroid/Texture/");
 	device_init(&device, 800, 600, screen_fb);
 	camera_at_zero(&device, 0, 5, -1);
-	
 	//init_texture2(&device);
 	device.render_state = RENDER_STATE_TEXTURE;
 

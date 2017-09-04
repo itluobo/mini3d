@@ -25,7 +25,7 @@ static void read_triangle(mesh_t* mesh, VBIDX idx, vertex_t* v1, vertex_t* v2, v
 void drow_mesh(device_t *device, mesh_t* mesh) {
 	set_texture(device, mesh->tex);
 	vertex_t v1, v2, v3;
-	for (int i = 0; i < mesh->triangle_cnt; ++i) {
+	for (size_t i = 0; i < mesh->triangle_cnt; ++i) {
 		read_triangle(mesh, i, &v1, &v2, &v3);
 		device_draw_primitive(device, &v1, &v2, &v3);
 	}
