@@ -345,7 +345,7 @@ int main(void)
 	int states[] = { RENDER_STATE_TEXTURE, RENDER_STATE_COLOR, RENDER_STATE_WIREFRAME };
 	int indicator = 0;
 	int kbhit = 0;
-	float alpha = 1;
+	float alpha = 3.14f;
 	float pos = 5;
 
 	TCHAR *title = _T("Mini3d (software render tutorial) - ")

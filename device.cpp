@@ -15,8 +15,6 @@ void device_init(device_t *device, int width, int height, void *fb) {
 	device->framebuffer = (IUINT32**)ptr;
 	device->zbuffer = (float**)(ptr + sizeof(void*) * height);
 	ptr += sizeof(void*) * height * 2;
-	//device->texture = (IUINT32**)ptr;
-	//ptr += sizeof(void*) * 1024;
 	framebuf = (char*)ptr;
 	zbuf = (char*)ptr + width * height * 4;
 	ptr += width * height * 8;
@@ -25,13 +23,6 @@ void device_init(device_t *device, int width, int height, void *fb) {
 		device->framebuffer[j] = (IUINT32*)(framebuf + width * 4 * j);
 		device->zbuffer[j] = (float*)(zbuf + width * 4 * j);
 	}
-	//device->texture[0] = (IUINT32*)ptr;
-	//device->texture[1] = (IUINT32*)(ptr + 16);
-	//memset(device->texture[0], 0, 64);
-	//device->tex_width = 2;
-	//device->tex_height = 2;
-	//device->max_u = 1.0f;
-	//device->max_v = 1.0f;
 	device->width = width;
 	device->height = height;
 	device->background = 0xc0c0c0;
@@ -48,19 +39,6 @@ void device_destroy(device_t *device) {
 	device->zbuffer = NULL;
 	//device->texture = NULL;
 }
-
-//// 设置当前纹理
-//void device_set_texture(device_t *device, void *bits, long pitch, int w, int h) {
-//	char *ptr = (char*)bits;
-//	int j;
-//	assert(w <= 1024 && h <= 1024);
-//	for (j = 0; j < h; ptr += pitch, j++) 	// 重新计算每行纹理的指针
-//		device->texture[j] = (IUINT32*)ptr;
-//	device->tex_width = w;
-//	device->tex_height = h;
-//	device->max_u = (float)(w - 1);
-//	device->max_v = (float)(h - 1);
-//}
 
 // 清空 framebuffer 和 zbuffer
 void device_clear(device_t *device, int mode) {
@@ -133,22 +111,8 @@ void device_draw_line(device_t *device, int x1, int y1, int x2, int y2, IUINT32 
 	}
 }
 
-// 根据坐标读取纹理
-//IUINT32 device_texture_read(const device_t *device, float u, float v) {
-//	int x, y;
-//	u = u * device->max_u;
-//	v = v * device->max_v;
-//	x = (int)(u + 0.5f);
-//	y = (int)(v + 0.5f);
-//	x = CMID(x, 0, device->tex_width - 1);
-//	y = CMID(y, 0, device->tex_height - 1);
-//	return device->texture[y][x];
-//}
-
 void set_texture(device_t *device, texture *tex) {
 	device->tex = tex;
-	//long pitch = tex->width * tex->nrChannels;
-	//device_set_texture(device, tex->data, pitch, tex->width, tex->height);
 }
 
 //=====================================================================
