@@ -5,7 +5,8 @@
 // 渲染设备
 //=====================================================================
 typedef struct {
-	transform_t transform;      // 坐标变换器
+	camera_t camera;			// 相机
+	matrix_t world;				// 世界坐标变换
 	int width;                  // 窗口宽度
 	int height;                 // 窗口高度
 	IUINT32 **framebuffer;      // 像素缓存：framebuffer[y] 代表第 y行

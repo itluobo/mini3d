@@ -11,7 +11,6 @@ static int CMID(int x, int min, int max) { return (x < min) ? min : ((x > max) ?
 
 // 计算插值：t 为 [0, 1] 之间的数值
 static float interp(float x1, float x2, float t) { return x1 + (x2 - x1) * t; }
-
 float vector_length(const vector_t *v);
 // z = x + y
 void vector_add(vector_t *z, const vector_t *x, const vector_t *y);
@@ -46,28 +45,25 @@ void matrix_set_rotate(matrix_t *m, float x, float y, float z, float theta);
 // 设置摄像机（世界坐标到局部坐标的转换）
 void matrix_set_lookat(matrix_t *m, const vector_t *eye, const vector_t *at, const vector_t *up);
 // D3DXMatrixPerspectiveFovLH
-void matrix_set_perspective(matrix_t *m, float fovy, float aspect, float zn, float zf);
+void camera_set_perspective(matrix_t *m, float fovy, float aspect, float zn, float zf);
 
 //=====================================================================
-// 坐标变换
+// 相机
 //=====================================================================
 typedef struct {
-	matrix_t world;         // 世界坐标变换
 	matrix_t view;          // 摄影机坐标变换
 	matrix_t projection;    // 投影变换
-	matrix_t transform;     // transform = world * view * projection
+	matrix_t mvp;     // vp = view * projection
 	float w, h;             // 屏幕大小
-}	transform_t;
-// 矩阵更新，计算 transform = world * view * projection
-void transform_update(transform_t *ts);
+}	camera_t;
+// 矩阵更新，计算 mvp =  view * projection
+void camera_update(camera_t *ts);
 // 初始化，设置屏幕长宽
-void transform_init(transform_t *ts, int width, int height);
-// 将矢量 x 进行 project 
-void transform_apply(const transform_t *ts, vector_t *y, const vector_t *x);
+void camera_init(camera_t *ts, int width, int height);
 // 检查齐次坐标同 cvv 的边界用于视锥裁剪
-int transform_check_cvv(const vector_t *v);
+int camera_check_cvv(const vector_t *v);
 // 归一化，得到屏幕坐标
-void transform_homogenize(const transform_t *ts, vector_t *y, const vector_t *x);
+void camera_homogenize(const camera_t *ts, vector_t *y, const vector_t *x);
 
 //=====================================================================
 // 几何计算：顶点、扫描线、边缘、矩形、步长计算

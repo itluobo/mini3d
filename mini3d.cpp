@@ -196,8 +196,8 @@ void draw_plane(device_t *device, vertex_t* mesh, int a, int b, int c, int d) {
 void draw_box(device_t *device, float theta) {
 	matrix_t m;
 	matrix_set_rotate(&m, 0, 1, 0, theta);
-	device->transform.world = m;
-	transform_update(&device->transform);
+	device->world = m;
+	//camera_update(&device->camera);
 	draw_plane(device, box, 0, 1, 2, 3);
 	draw_plane(device, box, 4, 5, 6, 7);
 	draw_plane(device, box, 0, 4, 5, 1);
@@ -247,8 +247,8 @@ vertex_t plan[4] = {
 void draw_ground(device_t *device) {
 	matrix_t m;
 	matrix_set_rotate(&m, 1, 0, 0, 0);
-	device->transform.world = m;
-	transform_update(&device->transform);
+	device->world = m;
+	//camera_update(&device->camera);
 	
 	vertex_t p1 = plan[0], p2 = plan[1], p3 = plan[2], p4 = plan[3];
 	device_draw_primitive(device, &p1, &p2, &p3);
@@ -257,8 +257,8 @@ void draw_ground(device_t *device) {
 
 void camera_at_zero(device_t *device, float x, float y, float z) {
 	point_t eye = { x, y, z, 1 }, at = { 0, 0, 0, 1 }, up = { 0, 1, 0, 1 };
-	matrix_set_lookat(&device->transform.view, &eye, &at, &up);
-	transform_update(&device->transform);
+	matrix_set_lookat(&device->camera.view, &eye, &at, &up);
+	camera_update(&device->camera);
 }
 
 void loadModel(mesh_t* tar, std::string path, std::string dir)
@@ -384,8 +384,8 @@ int main(void)
 		//draw_box(&device, alpha);
 		matrix_t m;
 		matrix_set_rotate(&m, 0, 1, 0, alpha);
-		device.transform.world = m;
-		transform_update(&device.transform);
+		device.world = m;
+		//camera_update(&device.camera);
 		drow_mesh(&device, &box_mesh);
 		screen_update();
 		Sleep(1);

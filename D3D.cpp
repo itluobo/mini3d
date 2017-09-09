@@ -193,7 +193,7 @@ void matrix_set_lookat(matrix_t *m, const vector_t *eye, const vector_t *at, con
 }
 
 // D3DXMatrixPerspectiveFovLH
-void matrix_set_perspective(matrix_t *m, float fovy, float aspect, float zn, float zf) {
+void camera_set_perspective(matrix_t *m, float fovy, float aspect, float zn, float zf) {
 	float fax = 1.0f / (float)tan(fovy * 0.5f);
 	matrix_set_zero(m);
 	m->m[0][0] = (float)(fax / aspect);
@@ -204,31 +204,26 @@ void matrix_set_perspective(matrix_t *m, float fovy, float aspect, float zn, flo
 }
 
 
-// 矩阵更新，计算 transform = world * view * projection
-void transform_update(transform_t *ts) {
-	matrix_t m;
-	matrix_mul(&m, &ts->world, &ts->view);
-	matrix_mul(&ts->transform, &m, &ts->projection);
+// 矩阵更新，计算 mvp = view * projection
+void camera_update(camera_t *ts) {
+	//matrix_t m;
+	//matrix_mul(&m, &ts->world, &ts->view);
+	matrix_mul(&ts->mvp, &ts->view, &ts->projection);
 }
 
 // 初始化，设置屏幕长宽
-void transform_init(transform_t *ts, int width, int height) {
+void camera_init(camera_t *ts, int width, int height) {
 	float aspect = (float)width / ((float)height);
-	matrix_set_identity(&ts->world);
+	//matrix_set_identity(&ts->world);
 	matrix_set_identity(&ts->view);
-	matrix_set_perspective(&ts->projection, 3.1415926f * 0.5f, aspect, 1.0f, 500.0f);
+	camera_set_perspective(&ts->projection, 3.1415926f * 0.5f, aspect, 1.0f, 500.0f);
 	ts->w = (float)width;
 	ts->h = (float)height;
-	transform_update(ts);
-}
-
-// 将矢量 x 进行 project 
-void transform_apply(const transform_t *ts, vector_t *y, const vector_t *x) {
-	matrix_apply(y, x, &ts->transform);
+	camera_update(ts);
 }
 
 // 检查齐次坐标同 cvv 的边界用于视锥裁剪
-int transform_check_cvv(const vector_t *v) {
+int camera_check_cvv(const vector_t *v) {
 	float w = v->w;
 	int check = 0;
 	if (v->z < 0.0f) check |= 1;
@@ -241,7 +236,7 @@ int transform_check_cvv(const vector_t *v) {
 }
 
 // 归一化，得到屏幕坐标
-void transform_homogenize(const transform_t *ts, vector_t *y, const vector_t *x) {
+void camera_homogenize(const camera_t *ts, vector_t *y, const vector_t *x) {
 	float rhw = 1.0f / x->w;
 	y->x = (x->x * rhw + 1.0f) * ts->w * 0.5f;
 	y->y = (1.0f - x->y * rhw) * ts->h * 0.5f;

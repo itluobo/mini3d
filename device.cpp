@@ -27,7 +27,8 @@ void device_init(device_t *device, int width, int height, void *fb) {
 	device->height = height;
 	device->background = 0xc0c0c0;
 	device->foreground = 0;
-	transform_init(&device->transform, width, height);
+	camera_init(&device->camera, width, height);
+	matrix_set_identity(&device->world);
 	device->render_state = RENDER_STATE_WIREFRAME;
 }
 
@@ -184,22 +185,23 @@ void device_draw_primitive(device_t *device, const vertex_t *v1,
 	const vertex_t *v2, const vertex_t *v3) {
 	point_t p1, p2, p3, c1, c2, c3;
 	int render_state = device->render_state;
-
-	// 按照 Transform 变化
-	transform_apply(&device->transform, &c1, &v1->pos);
-	transform_apply(&device->transform, &c2, &v2->pos);
-	transform_apply(&device->transform, &c3, &v3->pos);
+	matrix_t m;
+	matrix_mul(&m, &device->world, &device->camera.mvp);
+	// 局部坐标->世界坐标->相机投影
+	matrix_apply(&c1, &v1->pos, &m);
+	matrix_apply(&c2, &v2->pos, &m);
+	matrix_apply(&c3, &v3->pos, &m);
 
 	// 裁剪，注意此处可以完善为具体判断几个点在 cvv内以及同cvv相交平面的坐标比例
 	// 进行进一步精细裁剪，将一个分解为几个完全处在 cvv内的三角形
-	if (transform_check_cvv(&c1) != 0) return;
-	if (transform_check_cvv(&c2) != 0) return;
-	if (transform_check_cvv(&c3) != 0) return;
+	if (camera_check_cvv(&c1) != 0) return;
+	if (camera_check_cvv(&c2) != 0) return;
+	if (camera_check_cvv(&c3) != 0) return;
 
 	// 归一化
-	transform_homogenize(&device->transform, &p1, &c1);
-	transform_homogenize(&device->transform, &p2, &c2);
-	transform_homogenize(&device->transform, &p3, &c3);
+	camera_homogenize(&device->camera, &p1, &c1);
+	camera_homogenize(&device->camera, &p2, &c2);
+	camera_homogenize(&device->camera, &p3, &c3);
 
 	// 纹理或者色彩绘制
 	if (render_state & (RENDER_STATE_TEXTURE | RENDER_STATE_COLOR)) {
