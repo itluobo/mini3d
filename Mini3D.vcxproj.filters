@@ -199,6 +199,7 @@
     <ClInclude Include="libraries\include\lua\lzio.h">
       <Filter>lua</Filter>
     </ClInclude>
+    <ClInclude Include="Render.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="assimp">

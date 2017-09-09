@@ -175,6 +175,7 @@
     <ClInclude Include="libraries\include\lua\lvm.h" />
     <ClInclude Include="libraries\include\lua\lzio.h" />
     <ClInclude Include="mesh.h" />
+    <ClInclude Include="Render.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="texture.h" />
   </ItemGroup>

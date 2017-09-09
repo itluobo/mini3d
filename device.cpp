@@ -186,8 +186,9 @@ void device_draw_primitive(device_t *device, const vertex_t *v1,
 	point_t p1, p2, p3, c1, c2, c3;
 	int render_state = device->render_state;
 	matrix_t m;
+	// m = 局部坐标->世界坐标->相机投影
 	matrix_mul(&m, &device->world, &device->camera.mvp);
-	// 局部坐标->世界坐标->相机投影
+	
 	matrix_apply(&c1, &v1->pos, &m);
 	matrix_apply(&c2, &v2->pos, &m);
 	matrix_apply(&c3, &v3->pos, &m);
